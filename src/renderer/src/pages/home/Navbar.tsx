@@ -5,6 +5,7 @@ import { modelGenerating } from '@renderer/hooks/useRuntime'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useShortcut } from '@renderer/hooks/useShortcuts'
 import { useShowAssistants, useShowTopics } from '@renderer/hooks/useStore'
+import { useTokenUsage } from '@renderer/hooks/useTokenUsage'
 import { useAppDispatch } from '@renderer/store'
 import { setNarrowMode } from '@renderer/store/settings'
 import type { Assistant, Topic } from '@renderer/types'
@@ -25,6 +26,34 @@ interface Props {
   setActiveTopic: (topic: Topic) => void
   setActiveAssistant: (assistant: Assistant) => void
   position: 'left' | 'right'
+}
+
+const TokenUsageBadge: FC = () => {
+  const { usage } = useTokenUsage()
+  const total = usage.input_tokens + usage.output_tokens
+
+  return (
+    <Tooltip
+      title={
+        <div style={{ fontSize: '12px', lineHeight: '1.8' }}>
+          <div>{t('sidebar.tokenUsage.today')}</div>
+          <div style={{ marginTop: '4px' }}>
+            {t('sidebar.tokenUsage.input')}: {usage.input_tokens.toLocaleString()}
+          </div>
+          <div>
+            {t('sidebar.tokenUsage.output')}: {usage.output_tokens.toLocaleString()}
+          </div>
+          <div style={{ marginTop: '4px', fontWeight: 'bold' }}>
+            {t('sidebar.tokenUsage.total')}: {total.toLocaleString()}
+          </div>
+        </div>
+      }
+      placement="bottom">
+      <TokenUsageBadgeContainer>
+        <TokenUsageBadgeText>{total.toLocaleString()}</TokenUsageBadgeText>
+      </TokenUsageBadgeContainer>
+    </Tooltip>
+  )
 }
 
 const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, activeTopic, setActiveTopic }) => {
@@ -110,6 +139,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, activeTo
         className="home-navbar-right">
         <HStack alignItems="center" gap={6}>
           <UpdateAppButton />
+          <TokenUsageBadge />
           <Tooltip title={t('chat.assistant.search.placeholder')} mouseEnterDelay={0.8}>
             <NarrowIcon onClick={() => SearchPopup.show()}>
               <Search size={18} />
@@ -144,6 +174,23 @@ const NarrowIcon = styled(NavbarIcon)`
   @media (max-width: 1000px) {
     display: none;
   }
+`
+
+const TokenUsageBadgeContainer = styled(NavbarIcon)`
+  min-width: 50px;
+  padding: 0 10px;
+  background-color: var(--color-background-soft);
+  border: 1px solid var(--color-border);
+
+  &:hover {
+    background-color: var(--color-background-mute);
+  }
+`
+
+const TokenUsageBadgeText = styled.span`
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text);
 `
 
 export default HeaderNavbar

@@ -121,12 +121,8 @@ const Sidebar: FC = () => {
 }
 
 const TokenUsagePanel: FC = () => {
-  const { usage, loading } = useTokenUsage()
+  const { usage } = useTokenUsage()
   const { t } = useTranslation()
-
-  if (loading && usage.total_tokens === 0) {
-    return null
-  }
 
   return (
     <Tooltip
