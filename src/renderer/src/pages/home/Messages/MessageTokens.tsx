@@ -1,4 +1,5 @@
 // import { useRuntime } from '@renderer/hooks/useRuntime'
+import { useTokenUsage } from '@renderer/hooks/useTokenUsage'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import type { Message } from '@renderer/types/newMessage'
 import { Popover } from 'antd'
@@ -12,6 +13,7 @@ interface MessageTokensProps {
 
 const MessageTokens: React.FC<MessageTokensProps> = ({ message }) => {
   // const { generating } = useRuntime()
+  const { usage } = useTokenUsage()
   const locateMessage = () => {
     void EventEmitter.emit(EVENT_NAMES.LOCATE_MESSAGE + ':' + message.id, false)
   }
@@ -65,14 +67,21 @@ const MessageTokens: React.FC<MessageTokensProps> = ({ message }) => {
   if (message.role === 'assistant') {
     let metrixs = ''
     let hasMetrics = false
+    const todayTotal = usage.input_tokens + usage.output_tokens
+    const todayUsageText = `今日消耗: ${todayTotal.toLocaleString()} tokens`
+
     if (message?.metrics?.completion_tokens && message?.metrics?.time_completion_millsec) {
       hasMetrics = true
-      metrixs = t('settings.messages.metrics', {
+      const metricsText = t('settings.messages.metrics', {
         time_first_token_millsec: message?.metrics?.time_first_token_millsec,
         token_speed: (message?.metrics?.completion_tokens / (message?.metrics?.time_completion_millsec / 1000)).toFixed(
           0
         )
       })
+      metrixs = `${todayUsageText}\n${metricsText}`
+    } else {
+      hasMetrics = true
+      metrixs = todayUsageText
     }
 
     const tokensInfo = (

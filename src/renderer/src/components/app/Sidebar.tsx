@@ -9,7 +9,6 @@ import { useMinapps } from '@renderer/hooks/useMinapps'
 import useNavBackgroundColor from '@renderer/hooks/useNavBackgroundColor'
 import { modelGenerating, useRuntime } from '@renderer/hooks/useRuntime'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { useTokenUsage } from '@renderer/hooks/useTokenUsage'
 import { getSidebarIconLabel, getThemeModeLabel } from '@renderer/i18n/label'
 import { ThemeMode } from '@renderer/types'
 import { isEmoji } from '@renderer/utils'
@@ -91,7 +90,6 @@ const Sidebar: FC = () => {
           </AppsContainer>
         )}
       </MainMenusContainer>
-      <TokenUsagePanel />
       <Menus>
         <Tooltip title={t('settings.theme.title') + ': ' + getThemeModeLabel(settedTheme)} placement="right">
           <Icon theme={theme} onClick={toggleTheme}>
@@ -117,42 +115,6 @@ const Sidebar: FC = () => {
         </Tooltip>
       </Menus>
     </Container>
-  )
-}
-
-const TokenUsagePanel: FC = () => {
-  const { usage } = useTokenUsage()
-  const { t } = useTranslation()
-
-  return (
-    <Tooltip
-      title={
-        <div style={{ fontSize: '12px', lineHeight: '1.8' }}>
-          <div>{t('sidebar.tokenUsage.today')}</div>
-          <div style={{ marginTop: '4px' }}>
-            {t('sidebar.tokenUsage.input')}: {usage.input_tokens.toLocaleString()}
-          </div>
-          <div>
-            {t('sidebar.tokenUsage.output')}: {usage.output_tokens.toLocaleString()}
-          </div>
-          <div style={{ marginTop: '4px', fontWeight: 'bold' }}>
-            {t('sidebar.tokenUsage.total')}: {usage.total_tokens.toLocaleString()}
-          </div>
-        </div>
-      }
-      placement="right">
-      <TokenUsageContainer>
-        <TokenUsageTitle>{t('sidebar.tokenUsage.title')}</TokenUsageTitle>
-        <TokenUsageRow>
-          <TokenUsageLabel>{t('sidebar.tokenUsage.inputShort')}</TokenUsageLabel>
-          <TokenUsageValue>{usage.input_tokens.toLocaleString()}</TokenUsageValue>
-        </TokenUsageRow>
-        <TokenUsageRow>
-          <TokenUsageLabel>{t('sidebar.tokenUsage.outputShort')}</TokenUsageLabel>
-          <TokenUsageValue>{usage.output_tokens.toLocaleString()}</TokenUsageValue>
-        </TokenUsageRow>
-      </TokenUsageContainer>
-    </Tooltip>
   )
 }
 
@@ -342,48 +304,6 @@ const Divider = styled.div`
   width: 50%;
   margin: 8px 0;
   border-bottom: 0.5px solid var(--color-border);
-`
-
-const TokenUsageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 8px 6px;
-  margin-bottom: 8px;
-  border-radius: 8px;
-  background-color: var(--color-background-soft);
-  -webkit-app-region: none;
-  min-width: calc(var(--sidebar-width) - 16px);
-  cursor: pointer;
-
-  &:hover {
-    background-color: var(--color-background-mute);
-  }
-`
-
-const TokenUsageTitle = styled.div`
-  font-size: 11px;
-  color: var(--color-text-2);
-  margin-bottom: 4px;
-  font-weight: 500;
-`
-
-const TokenUsageRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  font-size: 10px;
-  line-height: 1.4;
-`
-
-const TokenUsageLabel = styled.span`
-  color: var(--color-text-3);
-`
-
-const TokenUsageValue = styled.span`
-  color: var(--color-text);
-  font-weight: 500;
-  margin-left: 4px;
 `
 
 export default Sidebar
