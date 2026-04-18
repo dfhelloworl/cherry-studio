@@ -6026,6 +6026,17 @@
   "warning": {
     "missing_provider": "供应商不存在，已回退到默认供应商 {{provider}}。这可能导致问题。"
   },
+  "sidebar": {
+    "tokenUsage": {
+      "title": "今日用量",
+      "today": "今日用量",
+      "input": "输入",
+      "output": "输出",
+      "total": "总计",
+      "inputShort": "入",
+      "outputShort": "出"
+    }
+  },
   "words": {
     "knowledgeGraph": "知识图谱",
     "quit": "退出",

@@ -835,6 +835,29 @@ const api = {
   },
   analytics: {
     trackTokenUsage: (data: TokenUsageData) => ipcRenderer.invoke(IpcChannel.Analytics_TrackTokenUsage, data)
+  },
+  tokenUsage: {
+    getTodayUsage: (): Promise<{
+      date: string
+      input_tokens: number
+      output_tokens: number
+      total_tokens: number
+    }> => ipcRenderer.invoke(IpcChannel.TokenUsage_Get),
+    updateUsage: (update: { input_tokens: number; output_tokens: number }) =>
+      ipcRenderer.invoke(IpcChannel.TokenUsage_Update, update),
+    onUpdate: (
+      callback: (usage: { date: string; input_tokens: number; output_tokens: number; total_tokens: number }) => void
+    ): (() => void) => {
+      const channel = IpcChannel.TokenUsage_Updated
+      const listener = (
+        _: Electron.IpcRendererEvent,
+        usage: { date: string; input_tokens: number; output_tokens: number; total_tokens: number }
+      ) => callback(usage)
+      ipcRenderer.on(channel, listener)
+      return () => {
+        ipcRenderer.removeListener(channel, listener)
+      }
+    }
   }
 }
 
