@@ -22,6 +22,7 @@ import { channelManager } from './services/agents/services/channels'
 import { registerSessionStreamIpc } from './services/agents/services/channels/sessionStreamIpc'
 import { analyticsService } from './services/AnalyticsService'
 import { apiServerService } from './services/ApiServerService'
+import { tokenUsageService } from './services/TokenUsageService'
 import { appMenuService } from './services/AppMenuService'
 import { configManager } from './services/ConfigManager'
 import { lanTransferClientService } from './services/lanTransfer'
@@ -159,6 +160,8 @@ if (!app.requestSingleInstanceLock()) {
     await BackupManager.handleStartupRestore()
 
     const mainWindow = windowService.createMainWindow()
+
+    tokenUsageService.setMainWindow(mainWindow)
 
     new TrayService()
 

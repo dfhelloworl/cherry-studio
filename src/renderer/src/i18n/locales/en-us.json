@@ -6026,6 +6026,17 @@
   "warning": {
     "missing_provider": "The supplier does not exist; reverted to the default supplier {{provider}}. This may cause issues."
   },
+  "sidebar": {
+    "tokenUsage": {
+      "title": "Today's Usage",
+      "today": "Today's Usage",
+      "input": "Input",
+      "output": "Output",
+      "total": "Total",
+      "inputShort": "In",
+      "outputShort": "Out"
+    }
+  },
   "words": {
     "knowledgeGraph": "Knowledge Graph",
     "quit": "Quit",

@@ -89,6 +89,7 @@ import {
 } from './services/SpanCacheService'
 import storeSyncService from './services/StoreSyncService'
 import { themeService } from './services/ThemeService'
+import { tokenUsageService } from './services/TokenUsageService'
 import VertexAIService from './services/VertexAIService'
 import { setOpenLinkExternal } from './services/WebviewService'
 import { windowService } from './services/WindowService'
@@ -1198,5 +1199,11 @@ export async function registerIpc(mainWindow: BrowserWindow, app: Electron.App) 
   // Analytics
   ipcMain.handle(IpcChannel.Analytics_TrackTokenUsage, (_, data: TokenUsageData) =>
     analyticsService.trackTokenUsage(data)
+  )
+
+  // Token Usage
+  ipcMain.handle(IpcChannel.TokenUsage_Get, () => tokenUsageService.getTodayUsage())
+  ipcMain.handle(IpcChannel.TokenUsage_Update, (_, update: { input_tokens: number; output_tokens: number }) =>
+    tokenUsageService.updateUsage(update)
   )
 }

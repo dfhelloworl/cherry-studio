@@ -67,5 +67,10 @@ export function trackTokenUsage({ usage, model, source = 'chat' }: TokenUsagePar
       output_tokens: outputTokens,
       source
     })
+
+    void window.api.tokenUsage.updateUsage({
+      input_tokens: inputTokens,
+      output_tokens: outputTokens
+    })
   }
 }

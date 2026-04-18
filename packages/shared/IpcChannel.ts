@@ -450,5 +450,10 @@ export enum IpcChannel {
   OpenClaw_PerformUpdate = 'openclaw:perform-update',
 
   // Analytics
-  Analytics_TrackTokenUsage = 'analytics:track-token-usage'
+  Analytics_TrackTokenUsage = 'analytics:track-token-usage',
+
+  // Token Usage
+  TokenUsage_Get = 'token-usage:get',
+  TokenUsage_Update = 'token-usage:update',
+  TokenUsage_Updated = 'token-usage:updated'
 }
