@@ -14,7 +14,7 @@ const onUpdateCallbacks = new Set<(usage: DailyTokenUsage) => void>()
 let removeIpcListener: (() => void) | null = null
 
 const ensureIpcSubscribed = () => {
-  if (!removeIpcListener) {
+  if (!removeIpcListener && window.api.tokenUsage) {
     removeIpcListener = window.api.tokenUsage.onUpdate((usage) => {
       onUpdateCallbacks.forEach((cb) => cb(usage))
     })
@@ -44,8 +44,10 @@ export const useTokenUsage = () => {
 
   const fetchUsage = useCallback(async () => {
     try {
-      const data = await window.api.tokenUsage.getTodayUsage()
-      setUsage(data)
+      if (window.api.tokenUsage) {
+        const data = await window.api.tokenUsage.getTodayUsage()
+        setUsage(data)
+      }
     } catch (error) {
       logger.error('Failed to fetch token usage:', error as Error)
     } finally {
